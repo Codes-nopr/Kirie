@@ -1,0 +1,22 @@
+{
+  "name": "kirie",
+  "version": "1.0.0",
+  "description": "A lavalink wrapper for Eris library",
+  "main": "src\\index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "drop4out",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4"
+  },
+  "dependencies": {
+    "bignumber.js": "^9.0.2",
+    "eris": "^0.16.1",
+    "undici": "^4.14.1",
+    "ws": "^8.5.0"
+  }
+}
