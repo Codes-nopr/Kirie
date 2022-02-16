@@ -2,6 +2,7 @@ const { EventEmitter } = require("events");
 const KirieNode = require("./KirieNode");
 const KiriePlayer = require("./KiriePlayer");
 const Collection = require("../utils/Collection");
+const { voicePayloads } = require("../utils/Constants");
 
 const states = new Map();
 
@@ -85,7 +86,7 @@ class KirieManager extends EventEmitter {
         const voiceState = states.get(data?.d?.guild_id) ?? {};
 
         switch (data.t) {
-            case "VOICE_STATE_UPDATE":
+            case voicePayloads.voiceStateUpdate:
                 voiceState.op = "voiceUpdate";
                 voiceState.sessionId = data?.d?.session_id ?? null;
 
@@ -104,7 +105,7 @@ class KirieManager extends EventEmitter {
                 }
             break;
 
-            case "VOICE_SERVER_UPDATE":
+            case voicePayloads.voiceServerUpdate:
                 voiceState.guildId = data?.d?.guild_id ?? null;
                 voiceState.event = data?.d ?? null;
             break;

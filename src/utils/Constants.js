@@ -6,4 +6,9 @@ const LoadTypes = {
     searchResult: "SEARCH_RESULT",
 };
 
-module.exports = LoadTypes;
+const voicePayloads = {
+    voiceStateUpdate: "VOICE_STATE_UPDATE",
+    voiceServerUpdate: "VOICE_SERVER_UPDATE",
+};
+
+module.exports = { LoadTypes, voicePayloads };

@@ -23,7 +23,6 @@ class KirieQueue extends Collection {
         }
         if (type === "track" && !this.repeatTrack) {
             this.repeatTrack = true;
-            this.repeatQueue = false;
             return this.repeatTrack;
         }
         if (type === "track" && this.repeatTrack) {
@@ -32,12 +31,10 @@ class KirieQueue extends Collection {
         }
         if (type === "queue" && !this.repeatQueue) {
             this.repeatQueue = true;
-            this.repeatTrack = false;
             return this.repeatQueue;
         }
         if (type === "queue" && this.repeatQueue) {
             this.repeatQueue = false;
-            this.repeatTrack = true;
             return this.repeatQueue;
         }
         if (type === "disable") {

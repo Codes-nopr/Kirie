@@ -6,7 +6,7 @@ const BigNumber = require("bignumber.js");
 const Queue = require("./KirieQueue");
 const Utils = require("../utils/Utils");
 const check = require("../utils/Check");
-const LoadTypes = require("../utils/Constants");
+const { LoadTypes } = require("../utils/Constants");
 
 class KiriePlayer {
      constructor(kirie, options, queueOption) {
@@ -16,7 +16,7 @@ class KiriePlayer {
         this.vol = options?.volume ?? 100;
         this.queue = new Queue(this, queueOption || {});
         // eslint-disable-next-line no-array-constructor
-        this.bands = new Array();
+        this.bands = [];
         this.isPlaying = false;
         this.isPaused = false;
         this.position = 0;
@@ -27,31 +27,31 @@ class KiriePlayer {
         this.kirie.emit("nodeCreate", this.node.options.host, this);
     }
 
-     get isConnected() {
+    get isConnected() {
         return this.connected;
     }
 
-     get playing() {
+    get playing() {
         return this.isPlaying;
     }
 
-     get paused() {
+    get paused() {
         return this.isPaused;
     }
 
-     get getVolume() {
+    get getVolume() {
         return this.vol;
     }
 
-     get getVoiceID() {
+    get getVoiceID() {
         return this.options.voiceChannel.channelID;
     }
 
-     get getGuildID() {
+    get getGuildID() {
         return this.options.guild.id;
     }
 
-     connect() {
+    connect() {
         this.kirie.post({
             op: 4,
             d: {
@@ -64,7 +64,7 @@ class KiriePlayer {
         this.connected = true;
     }
 
-     play(options) {
+    play(options) {
         const extra = options
         || (["startTime", "endTime", "noReplace"]
         .every((v) => Object.keys(options || {}).includes(v))
@@ -74,7 +74,7 @@ class KiriePlayer {
         if (this.queue.empty) {
             throw new RangeError("Queue is empty.");
         }
-        if (this.connected === false) {
+        if (!this.connected) {
             this.connect();
         }
         const track = this.queue.first;
@@ -87,7 +87,7 @@ class KiriePlayer {
         });
     }
 
-     search(query, user, options) {
+    search(query, user, options) {
         check(query, "string", "Query must be a string.");
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve, reject) => {
@@ -150,7 +150,7 @@ class KiriePlayer {
         });
     }
 
-     pause(condition) {
+    pause(condition) {
         check(condition, "boolean", "Pause state must be a boolean.");
         this.node.post({
             op: "pause",
@@ -160,14 +160,14 @@ class KiriePlayer {
         this.isPaused = condition;
     }
 
-     stop() {
+    stop() {
         this.node.post({
             op: "stop",
             guildId: this.options.guild.id,
         });
     }
 
-     setVolume(level) {
+    setVolume(level) {
         check(level, "number", "Volume level must be a number (integer).");
         this.vol = Math.max(Math.min(level, 1000), 0);
         this.node.post({
@@ -225,7 +225,7 @@ class KiriePlayer {
         });
     }
 
-     clearEQ() {
+    clearEQ() {
         this.bands = new Array(15).fill(0.0);
         this.node.post({
             op: "equalizer",
@@ -234,12 +234,12 @@ class KiriePlayer {
         });
     }
 
-     setTextChannel(channel) {
+    setTextChannel(channel) {
         check(channel, "string", "Channel ID must be a string.");
         this.options.textChannel = channel;
     }
 
-     setVoiceChannel(channel, waitForConnect) {
+    setVoiceChannel(channel, waitForConnect) {
         check(channel, "string", "Channel ID must be a string.");
         this.options.voiceChannel = channel;
         this.options.voiceChannel.channelID = new BigNumber(channel);
@@ -248,7 +248,7 @@ class KiriePlayer {
         }, waitForConnect || 500);
     }
 
-     destroy() {
+    destroy() {
         this.pause(true);
         this.connected = false;
         this.kirie.post({
@@ -269,7 +269,7 @@ class KiriePlayer {
         this.kirie.playerCollection.delete(this.options.guild.id);
     }
 
-     setKaraoke(
+    setKaraoke(
         lvl,
         monoLvl,
         filtBand,
@@ -291,7 +291,7 @@ class KiriePlayer {
         });
     }
 
-     setTimescale(spd, pit, rt) {
+    setTimescale(spd, pit, rt) {
         check(spd, "number", "Speed must be a number.");
         check(pit, "number", "Pitch must be a number.");
         check(rt, "number", "Rate must be a number.");
@@ -306,7 +306,7 @@ class KiriePlayer {
         });
     }
 
-     setTremolo(freq, dept) {
+    setTremolo(freq, dept) {
         check(freq, "number", "Frequency must be a number.");
         check(dept, "number", "Depth must be a number.");
         this.node.post({
@@ -319,7 +319,7 @@ class KiriePlayer {
         });
     }
 
-     setVibrato(freq, dept) {
+    setVibrato(freq, dept) {
         check(freq, "number", "Frequency must be a number.");
         check(dept, "number", "Depth must be a number.");
         this.node.post({
@@ -332,7 +332,7 @@ class KiriePlayer {
         });
     }
 
-     setRotation(rot) {
+    setRotation(rot) {
         check(rot, "number", "Rotation must be a number.");
         this.node.post({
             op: "filters",
@@ -343,7 +343,7 @@ class KiriePlayer {
         });
     }
 
-     setDistortion(
+    setDistortion(
         sinOff,
         sinSc,
         cosOff,
@@ -377,7 +377,7 @@ class KiriePlayer {
         });
     }
 
-     setChannelMix(ltl, ltr, rtl, rtr) {
+    setChannelMix(ltl, ltr, rtl, rtr) {
         check(ltl, "number", "LeftToLeft must be a number.");
         check(ltr, "number", "LeftToRight must be a number.");
         check(rtl, "number", "RightToLeft must be a number.");
@@ -394,7 +394,7 @@ class KiriePlayer {
         });
     }
 
-     setLowPass(smooth) {
+    setLowPass(smooth) {
         check(smooth, "number", "Smooth must be a number.");
         this.node.post({
             op: "filters",
@@ -402,6 +402,13 @@ class KiriePlayer {
             lowPass: {
                 smoothing: smooth,
             },
+        });
+    }
+
+    removeAllFilters() {
+        this.node.post({
+            op: "filters",
+            guildId: this.options.guild.id,
         });
     }
 }
